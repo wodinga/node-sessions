@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res) {
     var post = req.body;
     console.log("posting...");
-    user.findOne({username : 'email@mail.com', password : 'password' }, function(err, entry){
+    user.findOne({username : post.email, password :post.password }, function(err, entry){
         console.log(post);
         if(entry)
         {
