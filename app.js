@@ -1,5 +1,4 @@
 var express = require('express');
-require('./db');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,7 +8,7 @@ var mongoose = require('mongoose')
 
 var routes = require('./routes/index');
 var login = require('./routes/login');
-//var users = require('./routes/users');
+var users = require('./routes/users');
 
 var app = express();
 
@@ -39,7 +38,7 @@ app.use(function(req, res, next) {
 // error handlers
 
 //Connect to the database
-//mongoose.connect('mongodb://localhost/bitcoin-user');
+mongoose.connect('mongodb://localhost/test');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

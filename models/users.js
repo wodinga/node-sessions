@@ -4,11 +4,6 @@ var Schema = mongoose.Schema;
 //mongoose.set('debug', true);
 //mongoose.connect('mongodb://localhost/bitcoin-user');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("We're connected!");
-});
 // create a schema
 var userSchema = new Schema({
     name: String,
@@ -26,7 +21,7 @@ var userSchema = new Schema({
 
 // the schema is useless so far
 // we need to create a model using it
-var User = mongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema, 'bitcoin_user');
 
 // make this available to our users in our Node applications
-//module.exports = User;
+module.exports = User;
