@@ -18,7 +18,7 @@ var sessionOptions = {
     secret : "secret",
     resave: true,
     saveUninitialized : false,
-    cookie: { maxAge: 60000 }
+    cookie: { secure: true, maxAge: 60000 }
 };
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
