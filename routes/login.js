@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
 /* POST login page. */
 router.post('/', function(req, res) {
     //this is the object that contains the form's email and password fields
+    console.log(sess.id);
     sess = req.session;
     console.log(sess.test);
     var post = req.body;
@@ -26,6 +27,7 @@ router.post('/', function(req, res) {
         if(entry)
         {
             res.send("You logged in");
+            sess.id = genuuid();
             console.log("Email: %s\tPassword:%s", entry.username, entry.password); 
         }
         else
