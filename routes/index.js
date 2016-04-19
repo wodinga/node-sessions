@@ -3,19 +3,42 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var user = require('../models/users');
 var sess;
-/* GET home page. */
 router.get('/', function(req, res, next) {
     sess = req.session;
     sess.view++;
     sess.test = 'test';
     console.log(sess.test);
-    res.render('index', { title: 'Express' });
+    if(sess.email)
+        res.render('index', { email: sess.email, title: 'Express' });
+    else
+        res.render('index', { title: 'Express' });
     sess.test = 'Express GET';
     req.session = sess;
     console.log(sess.id);
     console.log(sess.view);
 });
 
+/* GET home page. */
+router.get('/home', function(req, res, next){
+    sess = req.session;
+    sess.view++;
+    var email = 'mail@mail.com';
+    var password = 'p4ssw0rd';
+    var id = 'ID';
+    if(sess.email)
+    {
+        email = sess.email;
+    }
+    if(sess.password)
+    {
+        password = sess.password;
+    }
+    if(sess.id)
+    {
+        id = sess.id;
+    }
+    res.render('home', {email: email, password: password, id: id});
+});
 /* GET login page. */
 router.get('/login', function(req, res, next) {
     sess = req.session;
@@ -40,6 +63,7 @@ router.post('/login', function(req, res) {
     //Query to see if the username and password exist in the system
     user.findOne({username : post.email, password :post.password }, function(err, entry){
         sess.email = post.email;
+        sess.password = post.password;
         //console.log(sess.id);
         //sess.regenerate();
         //console.log(sess.id);
