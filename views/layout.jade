@@ -9,5 +9,37 @@ html
 
     //Latest compiled and minified JavaScript 
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS' crossorigin='anonymous')
-  body
+  body(background='#FF00FF')
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+            span.sr-only Toggle navigation
+            |             
+            span.icon-bar
+            |             
+            span.icon-bar
+            |             
+            span.icon-bar
+          |           
+          if email
+              a.navbar-brand(href='#')= email 
+          else
+              a.navbar-brand(href='/login') Login 
+        |         
+        #navbar.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.active
+              a(href='/') Root
+            |             
+            li
+              a(href='/home') Home
+            |             
+            li
+              a(href='/login') Login
+        // /.nav-collapse
+    |     
+    p(bgcolor='#{color}') Email: #{email} 
+    p(bgcolor='#{color}') ID: #{id}
+    p(bgcolor='#{color}') Logged in: #{loggedIn} 
     block content

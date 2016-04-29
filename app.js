@@ -17,8 +17,9 @@ var app = express();
 var sessionOptions = {
     secret : "secret",
     resave: true,
-    saveUninitialized : false,
-    cookie: { maxAge: 60000 }
+    rolling: true,
+    saveUninitialized : true,
+    cookie: { secure: true, maxAge: 60000 }
 };
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
