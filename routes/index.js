@@ -54,7 +54,6 @@ router.get('/', function(req, res, next) {
     if(req.session.color == undefined)
         req.session.color = 0;
     req.session.view++;
-    req.session.test = 'test';
     if(!(req.session.email == undefined))
     {
         email = req.session.email;
@@ -119,7 +118,6 @@ router.post('/login', function(req, res) {
     if(req.session.color == undefined)
         req.session.color = 0;
     req.session.view++;
-    console.log(req.session.test);
     var post = req.body;
     console.log("posting...");
     console.log(req.session.view);
