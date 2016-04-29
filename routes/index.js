@@ -19,7 +19,12 @@ router.use(function(req, res, next){
     console.log('sessionID: ' + sessionID);
     console.log('req.sessionID == sessionID: ' + (req.sessionID == sessionID));
     //If the cookie's session ID isn't the same as the old one, log out!
-    if(!(req.sessionID === sessionID))
+    if(sessionID && !(req.sessionID === sessionID))
+    {
+        req.session.loggedIn = false;
+        res.send('Heck you heckin\' hacker!');
+    }
+    else if(!sessionID)
     {
         req.session.loggedIn = false;
         next();
@@ -36,16 +41,12 @@ router.use(function(req, res, next){
             //Save current session ID to compare
             if(!err)
             {
-                console.log("In regenerate");
-                console.log("req.sessionID = " + req.sessionID);
                 //Copy old session values to the new session
                 sessionID = req.sessionID;
                 next();
             }
         });
     }
-    console.log("Outside of regenerate");
-    console.log("req.sessionID = " + req.sessionID);
 });
 router.get('/', function(req, res, next) {
     var email = 'mail@mail.com';
