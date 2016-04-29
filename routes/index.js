@@ -2,8 +2,11 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var user = require('../models/users');
+var sessionID;
 router.use(function(req, res, next){
     console.log(req.session);
+    console.log(req.sessionID);
+    console.log(sessionID);
     if(req.session.view)
     {
         req.session.view++;
@@ -12,24 +15,35 @@ router.use(function(req, res, next){
     {
         req.session.view = 0;
     }
-    if(!req.session.loggedIn)
+    console.log('req.sessionID: ' + req.sessionID );
+    console.log('sessionID: ' + sessionID);
+    console.log('req.sessionID == sessionID: ' + (req.sessionID == sessionID));
+    //If the cookie's session ID isn't the same as the old one, log out!
+    if(!(req.sessionID === sessionID))
     {
         req.session.loggedIn = false;
+        next();
     }
-    var oldSession = req.session;
-    req.session.regenerate(function(err){
-        req.session.email = oldSession.email;
-        //req.session.id = oldSession.id;
-        req.session.view = oldSession.view;
-        req.session.loggedIn = oldSession.loggedIn;
-        if(!err)
-        {
-            console.log("In regenerate");
-            console.log("req.sessionID = " + req.sessionID);
-            //Copy old session values to the new session
-            next();
-        }
-    });
+    else
+    {
+        //If the cookie's session ID is the same as the old one, the session is secure
+        //so rotate the session ID to become a new one and set sessionID
+        var oldSession = req.session;
+        req.session.regenerate(function(err){
+            req.session.email = oldSession.email;
+            req.session.view = oldSession.view;
+            req.session.loggedIn = oldSession.loggedIn;
+            //Save current session ID to compare
+            if(!err)
+            {
+                console.log("In regenerate");
+                console.log("req.sessionID = " + req.sessionID);
+                //Copy old session values to the new session
+                sessionID = req.sessionID;
+                next();
+            }
+        });
+    }
     console.log("Outside of regenerate");
     console.log("req.sessionID = " + req.sessionID);
 });
@@ -112,16 +126,18 @@ router.post('/login', function(req, res) {
     user.findOne({username : post.email, password :post.password }, function(err, entry){
         req.session.email = post.email;
         req.session.password = post.password;
-        req.session.loggedIn = true;
+        sessionID = req.sessionID;
         console.log(post);
         if(entry)
         {
+            req.session.loggedIn = true;
             console.log(req.session.id);
             res.send("You logged in");
             console.log("Email: %s\tPassword:%s", entry.username, entry.password); 
         }
         else
         {
+            req.session.loggedIn = false;
             console.log(err);
             res.send('Couldn\'t login.');
         }
